@@ -1,0 +1,22 @@
+#!/bin/bash
+
+ZIP_FILE="submission.zip"
+SRC_DIR="src"
+SCRIPTS=("app" "db-reset" "test" "pom.xml")
+
+if [ -f $ZIP_FILE ]; then
+    rm $ZIP_FILE
+fi
+
+zip -r $ZIP_FILE $SRC_DIR
+
+for item in "${SCRIPTS[@]}"; do
+    if [ -f $item ]; then
+        zip $ZIP_FILE $item
+    else
+        echo "Warning: $item not found and will not be included in the zip."
+    fi
+done
+
+echo "Created $ZIP_FILE with contents:"
+zipinfo $ZIP_FILE
