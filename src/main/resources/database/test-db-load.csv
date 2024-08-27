@@ -1,0 +1,5 @@
+sessionToken,username,password,name,status,updated
+test-token,test1,123,testuser,cnm,2024-08-27 00:14:21
+test-token2,test2,123,testuser2,hello,2024-08-28 00:14:21
+new-test-token,new-test1,123,new-testuser,new-cnm,2024-08-27 00:14:21
+new-test-token,new-test1,123,new-testuser,new-cnm,2024-08-27 00:14:21

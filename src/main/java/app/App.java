@@ -6,15 +6,16 @@ import java.util.List;
 
 public class App {
     public static void main(String[] args) {
+        Controller controller = new Controller();
+        List<String> commandArgs;
 
         if (args.length == 1) {
             String[] splitArgs = args[0].split(" (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-            List<String> commandArgs = Arrays.asList(splitArgs);
+            commandArgs = Arrays.asList(splitArgs);
 
-            Controller controller = new Controller();
             controller.handleRequest(commandArgs);
-        } else {
-            System.out.println("No command provided.");
+        } else if (args.length == 0) {
+            controller.handleRequest(commandArgs = List.of());
         }
     }
 }

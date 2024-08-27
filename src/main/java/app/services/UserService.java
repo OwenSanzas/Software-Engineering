@@ -37,7 +37,7 @@ public class UserService {
             return;
         }
 
-        String sessionToken = sessionService.createSession(username);
+        String sessionToken = sessionService.createSession();
         Person newUser = new Person(sessionToken, username, password, name, status, LocalDateTime.now());
 
         repository.addPerson(newUser);
@@ -67,7 +67,7 @@ public class UserService {
             return;
         }
 
-        String sessionToken = sessionService.createSession(username);
+        String sessionToken = sessionService.createSession();
         Person newUser = new Person(sessionToken, username, password, name, status, LocalDateTime.now());
 
         repository.addPerson(newUser);

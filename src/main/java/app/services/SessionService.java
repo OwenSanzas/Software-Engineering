@@ -12,9 +12,14 @@ public class SessionService {
         this.repository = new Repository();
     }
 
-    // 创建新的 session，返回自定义的 session token
-    public String createSession(String username) {
-        return ShortIdGenerator.generateShortId();
+    public String createSession() {
+        String newSessionToken = ShortIdGenerator.generateShortId();
+        repository.activeSession(newSessionToken);
+        return newSessionToken;
+    }
+
+    public void disableSession(String sessionToken) {
+        repository.disableSession(sessionToken);
     }
 
     public boolean validateSession(String sessionToken) {

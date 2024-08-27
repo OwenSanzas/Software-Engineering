@@ -1,4 +1,39 @@
 #!/bin/bash
 
-echo passing: 85%
-echo coverage: 85%
+mvn clean test jacoco:report > mvn_output.txt 2>&1
+
+COVERAGE=$(grep -A 2 'Total' target/site/jacoco/index.html | grep -oP '\d+(\.\d+)?%' | head -n 1)
+
+if [ -z "$COVERAGE" ]; then
+    echo "No coverage data found"
+    COVERAGE="0.00%"
+fi
+
+TESTS_RUN=$(grep -A 2 'Results:' mvn_output.txt | grep -oP '(?<=Tests run: )\d+')
+TESTS_FAILED=$(grep -A 2 'Results:' mvn_output.txt | grep -oP '(?<=Failures: )\d+')
+TESTS_ERRORS=$(grep -A 2 'Results:' mvn_output.txt | grep -oP '(?<=Errors: )\d+')
+
+TESTS_RUN=${TESTS_RUN:-0}
+TESTS_FAILED=${TESTS_FAILED:-0}
+TESTS_ERRORS=${TESTS_ERRORS:-0}
+
+if [ -z "$TESTS_RUN" ]; then
+    TESTS_RUN=0
+fi
+if [ -z "$TESTS_FAILED" ]; then
+    TESTS_FAILED=0
+fi
+if [ -z "$TESTS_ERRORS" ]; then
+    TESTS_ERRORS=0
+fi
+
+TESTS_PASSED=$((TESTS_RUN - TESTS_FAILED - TESTS_ERRORS))
+
+if [ "$TESTS_RUN" -eq 0 ]; then
+    PASSING_RATE=0
+else
+    PASSING_RATE=$((TESTS_PASSED * 100 / TESTS_RUN))
+fi
+
+echo "passing: ${PASSING_RATE}%"
+echo "coverage: ${COVERAGE}"

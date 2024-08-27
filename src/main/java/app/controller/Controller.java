@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.auth.*;
 import app.services.*;
 import app.controller.utils.DisplayUtils;
 
@@ -7,8 +8,15 @@ import java.util.*;
 
 public class Controller {
 
-    private final UserService userService = new UserService();
-    private final SessionService sessionService = new SessionService();
+    private final UserService userService;
+    private final SessionService sessionService;
+    private final Authenticator auth;
+
+    public Controller() {
+        userService = new UserService();
+        sessionService = new SessionService();
+        auth = new Authenticator();
+    }
 
     public void handleRequest(List<String> commandArgs) {
         if (commandArgs.isEmpty()) {
@@ -17,6 +25,22 @@ public class Controller {
         }
 
         String command = commandArgs.get(0).toLowerCase();
+
+        if ("session".equals(command)) {
+            if (commandArgs.size() >= 3) {
+                String sessionToken = commandArgs.get(1);
+                String sessionCommand = commandArgs.get(2).toLowerCase();
+                if (auth.validateSession(sessionToken)) {
+                    handleSessionCommand(sessionToken, sessionCommand, commandArgs.subList(3, commandArgs.size()));
+                } else {
+                    System.out.println("try harder.");
+                    System.out.println("invalid request: invalid session token");
+                    System.out.println("home: ./app");
+                }
+            } else {
+                DisplayUtils.displayInvalidCommand(commandArgs);
+            }
+        }
 
         switch (command) {
             case "home":
@@ -30,15 +54,6 @@ public class Controller {
                 break;
             case "login":
                 handleLogin(commandArgs);
-                break;
-            case "session":
-                if (commandArgs.size() >= 3) {
-                    String sessionToken = commandArgs.get(1);
-                    String sessionCommand = commandArgs.get(2).toLowerCase();
-                    handleSessionCommand(sessionToken, sessionCommand, commandArgs.subList(3, commandArgs.size()));
-                } else {
-                    DisplayUtils.displayInvalidCommand(commandArgs);
-                }
                 break;
             default:
                 DisplayUtils.displayInvalidCommand(commandArgs);
