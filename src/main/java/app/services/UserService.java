@@ -22,6 +22,12 @@ public class UserService {
         this.repository = new Repository();
     }
 
+    public UserService(Repository repository) {
+        this.msgDisplay = new MsgDisplay();
+        this.sessionService = new SessionService();
+        this.repository = repository;
+    }
+
     public void createUser(String username, String password, String name, String status) {
         if (repository.findUserByUsername(username) != null) {
             System.out.println("try harder.");

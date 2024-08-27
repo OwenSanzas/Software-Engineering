@@ -18,12 +18,16 @@ public class SessionService {
         return newSessionToken;
     }
 
-    public void disableSession(String sessionToken) {
-        repository.disableSession(sessionToken);
+    public boolean activeSession(String sessionToken) {return repository.activeSession(sessionToken);}
+
+    public boolean disableSession(String sessionToken) {
+        return repository.disableSession(sessionToken);
     }
 
     public boolean validateSession(String sessionToken) {
         return repository.validateSession(sessionToken);
     }
+
+    public boolean deleteSession(String sessionToken) {return repository.deleteSession(sessionToken);}
 
 }

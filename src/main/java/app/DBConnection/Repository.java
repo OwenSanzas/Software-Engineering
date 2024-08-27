@@ -90,6 +90,7 @@ public class Repository {
         }
 
         try (FileWriter fileWriter = new FileWriter(sessionFilePath)) {
+            System.out.println("Updating session file: " + updatedCsv.toString());
             fileWriter.write(updatedCsv.toString());
             sessionData = updatedCsv.toString();
         } catch (IOException e) {

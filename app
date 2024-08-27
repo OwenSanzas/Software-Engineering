@@ -1,6 +1,7 @@
 #!/bin/bash
 
-PROJECT_ROOT="/home/ze/CSE606/Project0/app"
+# get path
+PROJECT_ROOT=$(pwd)
 
 SRC_DIR="$PROJECT_ROOT/src/main/java"
 BIN_DIR="$PROJECT_ROOT/bin"
