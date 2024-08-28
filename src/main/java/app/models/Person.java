@@ -43,4 +43,14 @@ public class Person {
     }
 
     public String getPassword() { return password; }
+
+    public void setName(String name) {  this.name = name; }
+
+    public void setStatus(String status) {  this.status = status; }
+
+    public void setUpdated(LocalDateTime updated) {  this.updated = updated; }
+
+    public void setPassword(String password) {  this.password = password; }
+
+    public void setSessionToken(String sessionToken) {  this.sessionToken = sessionToken; }
 }

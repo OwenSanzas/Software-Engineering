@@ -12,6 +12,10 @@ public class SessionService {
         this.repository = new Repository();
     }
 
+    public SessionService(Repository repository) {
+        this.repository = repository;
+    }
+
     public String createSession() {
         String newSessionToken = ShortIdGenerator.generateShortId();
         repository.activeSession(newSessionToken);
@@ -28,6 +32,6 @@ public class SessionService {
         return repository.validateSession(sessionToken);
     }
 
-    public boolean deleteSession(String sessionToken) {return repository.deleteSession(sessionToken);}
+    public boolean deleteSession(String sessionToken) { return repository.deleteSession(sessionToken); }
 
 }

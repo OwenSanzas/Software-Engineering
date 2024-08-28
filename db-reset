@@ -1,3 +1,10 @@
 #!/bin/bash
 
-echo meow
+DB_FILE="src/main/resources/database/db.csv"
+SESSION_FILE="src/main/resources/database/session.csv"
+
+DB_HEADER="sessionToken,username,password,name,status,updated"
+SESSION_HEADER="sessionToken, isActive"
+
+echo "$DB_HEADER" > "$DB_FILE"
+echo "$SESSION_HEADER" > "$SESSION_FILE"

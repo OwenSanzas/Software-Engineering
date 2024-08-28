@@ -4,6 +4,7 @@ import app.models.Person;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Repository {
@@ -33,6 +34,46 @@ public class Repository {
         this.dbFilePath = dbFilePath;
         this.sessionFilePath = sessionFilePath;
         dbInit();
+    }
+
+
+    public void updatePerson(Person updatedPerson) {
+        // 遍历 personsList 查找要更新的用户
+        for (int i = 0; i < personsList.size(); i++) {
+            Person person = personsList.get(i);
+            if (person.getSessionToken().equals(updatedPerson.getSessionToken())) {
+                personsList.set(i, updatedPerson);
+                break;
+            }
+        }
+
+        // 更新数据库文件
+        StringBuilder finalCsv = new StringBuilder();
+        finalCsv.append("sessionToken,username,password,name,status,updated\n");
+
+        for (Person person : personsList) {
+            String personCsv = person.getSessionToken() + "," +
+                    person.getUsername() + "," +
+                    person.getPassword() + "," +
+                    person.getName() + "," +
+                    person.getStatus() + "," +
+                    person.getUpdated();
+            finalCsv.append(personCsv).append("\n");
+        }
+
+        try (FileWriter fileWriter = new FileWriter(dbFilePath)) {
+            fileWriter.write(finalCsv.toString());
+        } catch (IOException e) {
+            System.out.println("Error writing to database: " + e.getMessage());
+        }
+    }
+
+    public List<Person> getPersonsList() {
+        return personsList;
+    }
+
+    public HashMap<String, Integer> getSessionTokens() {
+        return sessionTokens;
     }
 
     private void dbInit() {
@@ -90,7 +131,6 @@ public class Repository {
         }
 
         try (FileWriter fileWriter = new FileWriter(sessionFilePath)) {
-            System.out.println("Updating session file: " + updatedCsv.toString());
             fileWriter.write(updatedCsv.toString());
             sessionData = updatedCsv.toString();
         } catch (IOException e) {
@@ -116,6 +156,15 @@ public class Repository {
         return null;
     }
 
+    public Person findUserBySessionToken(String sessionToken) {
+        for (Person person : personsList) {
+            if (person.getSessionToken().equalsIgnoreCase(sessionToken)) {
+                return person;
+            }
+        }
+        return null;
+    }
+
     public void addPerson(Person person) {
         personsList.add(person);
 
@@ -125,17 +174,41 @@ public class Repository {
             userList.addAll(Arrays.asList(rows));
         }
 
-        String newPersonCsv = person.getSessionToken() + "," +
-                person.getUsername() + "," +
-                person.getPassword() + "," +
-                person.getName() + "," +
-                person.getStatus() + "," +
-                person.getUpdated();
+        String newPersonCsv = String.join(",",
+                person.getSessionToken(),
+                person.getUsername(),
+                person.getPassword(),
+                person.getName(),
+                person.getStatus(),
+                person.getUpdated());
 
         userList.add(newPersonCsv);
 
         StringBuilder finalCsv = new StringBuilder();
         for (String personCsv : userList) {
+            finalCsv.append(personCsv).append("\n");
+        }
+
+        try (FileWriter fileWriter = new FileWriter(dbFilePath)) {
+            fileWriter.write(finalCsv.toString());
+        } catch (IOException e) {
+            System.out.println("Error writing to database: " + e.getMessage());
+        }
+    }
+
+    public void deletePerson(String sessionToken) {
+        personsList.removeIf(person -> person.getSessionToken().equals(sessionToken));
+
+        StringBuilder finalCsv = new StringBuilder();
+        finalCsv.append("sessionToken,username,password,name,status,updated\n");
+
+        for (Person person : personsList) {
+            String personCsv = person.getSessionToken() + "," +
+                    person.getUsername() + "," +
+                    person.getPassword() + "," +
+                    person.getName() + "," +
+                    person.getStatus() + "," +
+                    person.getUpdated();
             finalCsv.append(personCsv).append("\n");
         }
 

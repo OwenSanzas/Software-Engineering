@@ -2,16 +2,16 @@
 
 mvn clean test jacoco:report > mvn_output.txt 2>&1
 
-COVERAGE=$(ggrep -A 2 'Total' target/site/jacoco/index.html | ggrep -oP '\d+(\.\d+)?%' | head -n 1)
+COVERAGE=$(grep -A 2 'Total' target/site/jacoco/index.html | grep -oP '\d+(\.\d+)?%' | head -n 1)
 
 if [ -z "$COVERAGE" ]; then
     echo "No coverage data found"
     COVERAGE="0.00%"
 fi
 
-TESTS_RUN=$(ggrep -A 2 'Results:' mvn_output.txt | ggrep -oP '(?<=Tests run: )\d+')
-TESTS_FAILED=$(ggrep -A 2 'Results:' mvn_output.txt | ggrep -oP '(?<=Failures: )\d+')
-TESTS_ERRORS=$(ggrep -A 2 'Results:' mvn_output.txt | ggrep -oP '(?<=Errors: )\d+')
+TESTS_RUN=$(grep -A 2 'Results:' mvn_output.txt | grep -oP '(?<=Tests run: )\d+')
+TESTS_FAILED=$(grep -A 2 'Results:' mvn_output.txt | grep -oP '(?<=Failures: )\d+')
+TESTS_ERRORS=$(grep -A 2 'Results:' mvn_output.txt | grep -oP '(?<=Errors: )\d+')
 
 TESTS_RUN=${TESTS_RUN:-0}
 TESTS_FAILED=${TESTS_FAILED:-0}

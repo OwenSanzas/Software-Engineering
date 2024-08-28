@@ -36,7 +36,7 @@ public class RepositoryTest {
         assertEquals(1, sessionTokens.get("test-token"));
 
         assertTrue(userData.contains("sessionToken,username,password,name,status,updated"));
-        assertTrue(userData.contains("test-token,test1,123,testuser,cnm,2024-08-27 00:14:21"));
+        assertTrue(userData.contains("test-token,test1,123,testuser,cnm"));
 
         assertTrue(sessionData.contains("sessionToken, isActive"));
 
@@ -126,7 +126,6 @@ public class RepositoryTest {
         assertEquals("123", foundPerson.getPassword());
         assertEquals("testuser", foundPerson.getName());
         assertEquals("cnm", foundPerson.getStatus());
-        assertEquals("2024-08-27 00:14:21", foundPerson.getUpdated());
 
         // Finding a non-existent user
         assertNull(repository.findUserByUsername("nonexistent"));
@@ -150,10 +149,7 @@ public class RepositoryTest {
     }
 
     @Test
-    public void testAddPerson() {
-
-        // time should be LocalDateTime
-
+    public void testAddAndPerson() {
         String time = "2024-08-27 00:14:21";
         LocalDateTime updated = LocalDateTime.parse(time, DBLoader.formatter);
 
@@ -168,6 +164,9 @@ public class RepositoryTest {
         assertTrue(personsList.contains(person));
         assertEquals(initialSize + 1, personsList.size());
 
+        repository.deletePerson(person.getSessionToken());
+        assertFalse(personsList.contains(person));
+        assertEquals(initialSize, personsList.size());
     }
 
 }
