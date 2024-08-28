@@ -7,7 +7,7 @@
 |       Create       |   √    |
 |       Delete       |   √    |
 |        Edit        |   √    |
-|        Find        |   ×    |
+|        Find        |   √    |
 |     Home_Page      |   √    |
 |        Join        |   √    |
 |       Login        |   √    |
